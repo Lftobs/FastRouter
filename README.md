@@ -1,8 +1,8 @@
-# FastAPI File-Based Router
+# FileRouter
 
 A powerful file-based routing system for FastAPI that automatically maps file structures to API routes with support for dynamic parameters.
 
-> [!WARNING]
+> [!NOTE]
 > You can use this to fuck with your personal or a friends repo but do not push to prod :)  
 
 ## Features
@@ -54,8 +54,8 @@ routes/
         └── health.py          # GET /api/v1/health
 ```
 
-> [!WARNING]
-> The directory used for the file based routing (in the example above uses the eoutes dir) should strictly only contain the method call for the endpoint.
+> [!IMPORTANT]
+> The files in the directory used for the routing (the example above uses the routes dir) should strictly only contain the method call for the endpoint.
 > Example below:
 
 ## Route Handler Examples
