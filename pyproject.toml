@@ -1,11 +1,12 @@
 [project]
-name = "file-based-router"
+name = "fast-router"
 version = "0.0.3"
-description = "Add your description here"
+description = "A simple and intuitive file-based router for FastAPI applications."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.116.1",
+    "mkdocs-material>=9.6.21",
     "uvicorn>=0.35.0",
 ]
 

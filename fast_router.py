@@ -320,7 +320,7 @@ class FileBasedRouter:
         return self.app
 
 
-def file_router(routes_dir: str = "routes") -> FileBasedRouter:
+def FileRouter(routes_dir: str = "routes") -> FileBasedRouter:
     """Create and configure a file-based router."""
     router = FileBasedRouter(routes_dir)
     router.scan_routes()

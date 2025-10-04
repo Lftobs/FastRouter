@@ -1,0 +1,16 @@
+site_name: FastRouter Documentation
+site_url: https://mydomain.org/mysite
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: indigo
+markdown_extensions:
+  - pymdownx.snippets:
+      check_paths: true
+      base_path: [routes, "."]
+  - pymdownx.highlight:
+          anchor_linenums: true
+          line_spans: __span
+          pygments_lang_class: true
+  - pymdownx.superfences
