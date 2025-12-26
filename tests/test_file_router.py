@@ -28,79 +28,67 @@ class TestFileBasedRouter:
         """Test parsing of dynamic route segments."""
         router = FileBasedRouter()
 
-        # Simple parameter
         name, type_, is_catch_all = router._parse_dynamic_segment("[id]")
         assert name == "id"
         assert type_ == "str"
-        assert is_catch_all == False
+        assert not is_catch_all
 
-        # Typed parameter
         name, type_, is_catch_all = router._parse_dynamic_segment("[id:int]")
         assert name == "id"
         assert type_ == "int"
-        assert is_catch_all == False
+        assert not is_catch_all
 
-        # Slug parameter
         name, type_, is_catch_all = router._parse_dynamic_segment("[slug:]")
         assert name == "slug"
         assert type_ == "str"
-        assert is_catch_all == False
+        assert not is_catch_all
 
-        # Catch-all parameter
         name, type_, is_catch_all = router._parse_dynamic_segment("[...rest]")
         assert name == "rest"
         assert type_ == "str"
-        assert is_catch_all == True
+        assert is_catch_all
 
-        # Non-dynamic segment
         name, type_, is_catch_all = router._parse_dynamic_segment("static")
-        assert name == None
-        assert type_ == None
-        assert is_catch_all == False
+        assert name is None
+        assert type_ is None
+        assert not is_catch_all
 
     def test_convert_file_path_to_route(self):
         """Test conversion of file paths to route patterns."""
         router = FileBasedRouter(str(self.routes_dir))
 
-        # Index route
         file_path = self.routes_dir / "index.py"
-        pattern, params = router._convert_file_path_to_route(file_path)
-        assert pattern == "/"
+        patterns, params = router._convert_file_path_to_route(file_path)
+        assert patterns == ["/"]
         assert params == {}
 
-        # Simple nested route
         file_path = self.routes_dir / "users" / "index.py"
-        pattern, params = router._convert_file_path_to_route(file_path)
-        assert pattern == "/users"
+        patterns, params = router._convert_file_path_to_route(file_path)
+        assert patterns == ["/users"]
         assert params == {}
 
-        # Dynamic route with id
         file_path = self.routes_dir / "users" / "[id].py"
-        pattern, params = router._convert_file_path_to_route(file_path)
-        assert pattern == "/users/{id}"
+        patterns, params = router._convert_file_path_to_route(file_path)
+        assert patterns == ["/users/{id}"]
         assert params == {"id": {"type": "str", "is_catch_all": False}}
 
-        # Dynamic route with typed parameter
         file_path = self.routes_dir / "posts" / "[id:int].py"
-        pattern, params = router._convert_file_path_to_route(file_path)
-        assert pattern == "/posts/{id:int}"
+        patterns, params = router._convert_file_path_to_route(file_path)
+        assert patterns == ["/posts/{id:int}"]
         assert params == {"id": {"type": "int", "is_catch_all": False}}
 
-        # Slug route
         file_path = self.routes_dir / "blog" / "[slug:].py"
-        pattern, params = router._convert_file_path_to_route(file_path)
-        assert pattern == "/blog/{slug}"
+        patterns, params = router._convert_file_path_to_route(file_path)
+        assert patterns == ["/blog/{slug}"]
         assert params == {"slug": {"type": "str", "is_catch_all": False}}
 
-        # Catch-all route
         file_path = self.routes_dir / "files" / "[...path].py"
-        pattern, params = router._convert_file_path_to_route(file_path)
-        assert pattern == "/files/{path:path}"
+        patterns, params = router._convert_file_path_to_route(file_path)
+        assert patterns == ["/files/{path:path}"]
         assert params == {"path": {"type": "str", "is_catch_all": True}}
 
     def test_basic_route_registration(self):
         """Test basic route registration and handling."""
-        # Create a simple route file
         self.create_route_file(
             "index.py",
             """
@@ -117,19 +105,16 @@ def post():
 
         client = TestClient(router.get_app())
 
-        # Test GET request
         response = client.get("/")
         assert response.status_code == 200
         assert response.json() == {"message": "Hello World"}
 
-        # Test POST request
         response = client.post("/")
         assert response.status_code == 200
         assert response.json() == {"message": "Created"}
 
     def test_nested_routes(self):
         """Test nested route structures."""
-        # Create nested routes
         self.create_route_file(
             "users/index.py",
             """
@@ -200,12 +185,9 @@ def get(id):
 
         client = TestClient(router.get_app())
 
-        # Valid integer
         response = client.get("/posts/123")
         assert response.status_code == 200
         assert response.json() == {"post_id": 123, "type": "int"}
-
-        # Invalid integer should return 404 (no route match) or 422 (validation error)
         response = client.get("/posts/abc")
         assert response.status_code in [404, 422]
 
@@ -237,7 +219,7 @@ def get(slug):
             "files/[...path].py",
             """
 def get(path):
-    return {"path": path, "segments": path.split("/")}
+    return {"path": path, "segments": path.split("/") if path else []}
 """,
         )
 
@@ -251,6 +233,10 @@ def get(path):
         data = response.json()
         assert data["path"] == "documents/reports/2023/report.pdf"
         assert data["segments"] == ["documents", "reports", "2023", "report.pdf"]
+
+        response = client.get("/files")
+        assert response.status_code == 200
+        assert response.json()["path"] == ""
 
     def test_async_handlers(self):
         """Test async route handlers."""
@@ -327,16 +313,14 @@ def post(id):
         routes = router.get_routes()
         assert len(routes) == 2
 
-        # Find the dynamic route
         dynamic_route = next(r for r in routes if "[id]" in r["file_path"])
-        assert dynamic_route["pattern"] == "/users/{id}"
+        assert "/users/{id}" in dynamic_route["patterns"]
         assert "GET" in dynamic_route["methods"]
         assert "POST" in dynamic_route["methods"]
         assert dynamic_route["params"]["id"]["type"] == "str"
 
     def test_invalid_route_handling(self):
         """Test handling of invalid route files."""
-        # Create a file with syntax error
         self.create_route_file(
             "invalid.py",
             """
@@ -345,7 +329,6 @@ def get(:
 """,
         )
 
-        # Create a file with no handlers
         self.create_route_file(
             "no_handlers.py",
             """
@@ -354,10 +337,8 @@ some_variable = "test"
         )
 
         router = FileBasedRouter(str(self.routes_dir))
-        # Should not raise exception
         router.scan_routes()
 
-        # Should have no routes registered from invalid files
         routes = router.get_routes()
         assert all(
             "invalid" not in r["file_path"] and "no_handlers" not in r["file_path"]
@@ -380,6 +361,32 @@ def get():
         response = client.get("/test")
         assert response.status_code == 200
         assert response.json() == {"test": True}
+
+    def test_openapi_metadata(self):
+        """Test that docstrings and tag metadata are correctly reflected in OpenAPI."""
+        self.create_route_file(
+            "meta.py",
+            """
+def get():
+    \"\"\"This is a test description.\"\"\"
+    return {"ok": True}
+""",
+        )
+
+        router = FileBasedRouter(str(self.routes_dir))
+        router.set_tag_metadata("meta", description="Tag description")
+        router.scan_routes()
+
+        app = router.get_app()
+        openapi = app.openapi()
+
+        assert (
+            openapi["paths"]["/meta"]["get"]["description"]
+            == "This is a test description."
+        )
+
+        tag_meta = next(t for t in openapi["tags"] if t["name"] == "meta")
+        assert tag_meta["description"] == "Tag description"
 
 
 if __name__ == "__main__":

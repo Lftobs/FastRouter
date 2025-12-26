@@ -20,7 +20,7 @@ blog_posts = {
 }
 
 
-def get(slug: str):
+def getty(slug: str):
     """Get blog post by slug."""
     from fastapi import HTTPException
 
@@ -46,3 +46,7 @@ def put(slug: str):
         # Update existing post
         blog_posts[slug]["content"] = "This post has been updated!"
         return {"message": "Blog post updated", "slug": slug, "post": blog_posts[slug]}
+
+
+def _hello():
+    return {"message": "Hello, world!"}
