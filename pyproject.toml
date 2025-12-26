@@ -2,14 +2,39 @@
 name = "fast-router"
 version = "0.2.0"
 description = "A simple and intuitive file-based router for FastAPI applications."
+authors = [
+  { name = "Lftobs", email = "noreply@github.com" }
+]
 readme = "README.md"
 requires-python = ">=3.13"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Framework :: FastAPI",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Typing :: Typed",
+]
 dependencies = [
     "fastapi>=0.116.1",
     "tree-sitter>=0.25.2",
     "tree-sitter-python>=0.25.0",
     "uvicorn>=0.35.0",
 ]
+
+[project.urls]
+Homepage = "https://lftobs.github.io/FastRouter/"
+Repository = "https://github.com/Lftobs/FastRouter"
+Issues = "https://github.com/Lftobs/FastRouter/issues"
+Documentation = "https://lftobs.github.io/FastRouter/"
 
 
 [tool.pytest.ini_options]
