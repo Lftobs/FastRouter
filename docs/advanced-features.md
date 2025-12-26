@@ -47,6 +47,9 @@ def get(id: int):
 You can customize the documentation for entire directories (tags) using `set_tag_metadata`:
 
 ```python
+from fast_router import fast_router
+
+router = fast_router("routes")
 router.set_tag_metadata(
     "users", 
     description="Operations with users and their profiles.",
@@ -56,3 +59,4 @@ router.set_tag_metadata(
 
 ## Parameter Validation
 FastRouter validates your dynamic segment names. If you use a parameter in a filename (like `[id].py`) but forget to include it in your function signature (`def get():`), FastRouter will raise a clear error at startup.
+

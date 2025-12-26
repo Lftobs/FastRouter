@@ -2,6 +2,14 @@
 
 All notable changes to FastRouter will be documented in this file.
 
+## [0.2.0] - 2025-12-26
+
+### Changed
+- **PEP 8 Naming Refactor**: 
+    - Renamed `FileBasedRouter` class to `FastRouter`.
+    - Renamed package from `file_router` to `fast_router`.
+- **Project Structure**: Finalized the move to `src/fast_router`.
+
 ## [0.1.0] - 2025-12-26
 
 ### Added

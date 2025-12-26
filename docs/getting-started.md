@@ -37,7 +37,7 @@ def get():
 ```
 
 ### 3. Integrate with FastAPI
-In your `main.py`, use the `file_router` helper:
+In your `main.py`, use the `fast_router` helper:
 
 ```python
 import uvicorn
