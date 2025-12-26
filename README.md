@@ -2,6 +2,9 @@
 
 A powerful, high-performance file-based routing system for FastAPI. It automatically maps your directory structure to API routes using **Static Analysis** and **Lazy Loading**.
 
+> [!NOTE]
+> You can use this to fuck with your personal or a friends repo but do not push to production :)  
+
 ## 🚀 Features
 
 - **Static Analysis**: Uses `tree-sitter` to discover routes without executing your code.
