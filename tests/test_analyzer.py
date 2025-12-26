@@ -26,6 +26,7 @@ def _hello(): return {"m": "hello"}
     assert "POST" in handlers
     assert "OTHER" not in handlers
     assert "other" in stray
+    assert "_hello" not in stray
 
 
 def test_analyze_async_methods(analyzer, tmp_path):

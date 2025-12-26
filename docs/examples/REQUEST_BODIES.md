@@ -1,8 +1,6 @@
-# Request Body Handling in File-Based Router
+# Request Body Handling
 
-## How It Works
-
-The file-based router handles request bodies through **FastAPI's dependency injection system**. The router preserves the original function signatures, allowing FastAPI to automatically handle:
+FastRouter handles request bodies through **FastAPI's dependency injection system**. Because the router preserves your function signatures, FastAPI can automatically handle:
 
 - **JSON Request Bodies** (Pydantic models)
 - **Query Parameters** 
@@ -10,27 +8,11 @@ The file-based router handles request bodies through **FastAPI's dependency inje
 - **Form Data**
 - **Raw Request Access**
 
-## Implementation Location
+## How It Works
 
-**File**: `file_router.py`
-**Method**: `_create_route_wrapper()` (lines 125-170)
+FastRouter uses static analysis to find your functions, but it doesn't change how FastAPI works. When a request comes in, FastAPI sees your function exactly as you wrote it.
 
-### Key Features:
-
-1. **No Path Parameters**: Returns handler as-is → Full FastAPI dependency injection
-2. **With Path Parameters**: Preserves non-path parameters → Hybrid approach
-
-```python
-def _create_route_wrapper(self, handler: Callable, params: Dict[str, Any]):
-    if not params:
-        # No path parameters - return handler as-is for FastAPI to handle
-        return handler
-    
-    # For routes with path parameters, preserve other parameter types
-    # (request bodies, query params, headers, etc.)
-```
-
-## Request Body Examples
+## Examples
 
 ### 1. JSON Request Body (Pydantic Models)
 
@@ -43,18 +25,24 @@ class UserCreate(BaseModel):
     email: str
 
 def post(user_data: UserCreate):
+    """Create a new user."""
     return {"user": user_data.dict()}
 ```
 
-**Usage**: `POST /users` with JSON body
+**Usage**: `POST /users` with JSON body `{"name": "John", "email": "john@example.com"}`
 
 ### 2. Path Parameters + Request Body
 
 ```python
 # routes/users/[id:int].py
+from pydantic import BaseModel
+
+class UserUpdate(BaseModel):
+    name: str = None
+
 def put(id: int, user_data: UserUpdate):
-    # id from URL path, user_data from JSON body
-    return {"id": id, "data": user_data}
+    """Update user by ID."""
+    return {"id": id, "updated_data": user_data}
 ```
 
 **Usage**: `PUT /users/123` with JSON body
@@ -64,25 +52,29 @@ def put(id: int, user_data: UserUpdate):
 ```python
 # routes/posts.py
 from fastapi import Query, Header
+from typing import Optional
 
 def get(
     limit: int = Query(10),
-    authorization: str = Header(None)
+    authorization: Optional[str] = Header(None)
 ):
+    """Get posts with pagination and auth check."""
     return {"limit": limit, "has_auth": authorization is not None}
 ```
 
-**Usage**: `GET /posts?limit=5` with headers
+**Usage**: `GET /posts?limit=5` with `Authorization` header
 
 ### 4. Multiple Body Parts
 
 ```python
+from fastapi import Body
+
 def put(
-    post_data: PostData = Body(...),
-    comments: list[CommentData] = Body([]),
-    metadata: dict = Body({})
+    post_data: dict = Body(...),
+    comments: list = Body([]),
 ):
-    return {"post": post_data, "comments": comments, "metadata": metadata}
+    """Update post and comments in one request."""
+    return {"post": post_data, "comments": comments}
 ```
 
 ### 5. Raw Request Access
@@ -91,27 +83,9 @@ def put(
 from fastapi import Request
 
 async def patch(request: Request):
+    """Handle raw request for custom processing."""
     body = await request.body()
-    headers = dict(request.headers)
-    return {"body_size": len(body), "headers": headers}
-```
-
-## Testing Request Bodies
-
-```bash
-# JSON Body
-curl -X POST http://localhost:8000/users \
-  -H "Content-Type: application/json" \
-  -d '{"name": "John", "email": "john@example.com"}'
-
-# Query Parameters  
-curl "http://localhost:8000/posts?limit=5&published_only=true"
-
-# Headers + Body
-curl -X POST http://localhost:8000/posts \
-  -H "Authorization: Bearer token" \
-  -H "Content-Type: application/json" \
-  -d '{"title": "My Post", "content": "Content here"}'
+    return {"body_size": len(body)}
 ```
 
 ## Supported Parameter Types
@@ -125,4 +99,4 @@ curl -X POST http://localhost:8000/posts \
 | **Form** | `name: str = Form(...)` | From form data |
 | **Raw** | `request: Request` | Full request access |
 
-The router automatically handles all FastAPI parameter types while adding file-based routing capabilities! 🚀
+FastRouter automatically handles all FastAPI parameter types while adding file-based routing capabilities! 🚀

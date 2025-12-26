@@ -39,7 +39,7 @@ def client():
     ],
     ids=lambda x: x["name"],
 )
-def test_curl_error_fix(client, test_case):
+def test_api_endpoints(client, test_case):
     response = client.request(
         method=test_case["method"],
         url=test_case["url"],

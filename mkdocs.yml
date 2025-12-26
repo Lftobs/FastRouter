@@ -14,3 +14,12 @@ markdown_extensions:
           line_spans: __span
           pygments_lang_class: true
   - pymdownx.superfences
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Advanced Features: advanced-features.md
+  - Internal API: internal-api.md
+  - Changelog: changelog.md
+  - Examples:
+    - Request Bodies: examples/REQUEST_BODIES.md

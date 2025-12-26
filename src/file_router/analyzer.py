@@ -1,3 +1,4 @@
+import ast
 import tree_sitter_python as tspython
 from tree_sitter import Language, Parser
 from pathlib import Path
@@ -51,7 +52,6 @@ class StaticAnalyzer:
                                     expr = stmt.children[0]
                                     if expr.type == "string":
                                         try:
-                                            import ast
 
                                             docstring = ast.literal_eval(
                                                 content[

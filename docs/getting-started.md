@@ -1,47 +1,63 @@
 # Getting Started
 
-This guide will walk you through setting up and using the FastAPI File-Based Router in your project.
+This guide will walk you through setting up and using FastRouter in your project.
 
 ## Installation
 
-First, install the package using pip:
+We recommend using [uv](https://github.com/astral-sh/uv) for dependency management.
 
 ```bash
-pip install fastapi-file-based-router
+uv add fast-router
+```
+
+Or using pip:
+
+```bash
+pip install fast-router
 ```
 
 ## Basic Usage
 
-1.  **Create a `routes` directory:** In your project's root directory, create a folder named `routes`.
+### 1. Create a `routes` directory
+In your project's root directory, create a folder named `routes`.
 
-    ```
-    .
-    ├── main.py
-    └── routes/
-
-    ```
-
-2.  **Define your routes:** Create Python files inside the `routes` directory to define your API endpoints. For example, to create a simple "Hello World" endpoint at the root (`/`), create a file named `routes/index.py`:
-
-```python
---8<-- "routes/index.py"
+```text
+.
+├── main.py
+└── routes/
 ```
 
-3.  **Integrate with FastAPI:** In your main application file (e.g., `main.py`), import and use the `FileRouter`.
+### 2. Define your routes
+Create Python files inside the `routes` directory. For example, to create a "Hello World" endpoint at the root (`/`), create `routes/index.py`:
 
-    ```python
-    # main.py
-    from fastapi import FastAPI
-    from file_router import FileRouter
+```python
+def get():
+    """Welcome to FastRouter!"""
+    return {"message": "Hello World"}
+```
 
-    router = FileRouter("routes")
-    app = router.get_app()
+### 3. Integrate with FastAPI
+In your `main.py`, use the `file_router` helper:
 
-    if __name__ == 'main':
-        uvicorn.run(
-            "main:app", host="0.0.0.0", port=8000, reload=True, reload_dirs=["routes"]
-        )
+```python
+import uvicorn
+from fastapi import FastAPI
+from file_router import file_router
 
-    ```
+# Initialize the router
+router = file_router("routes")
+app = router.get_app()
 
-Now, when you run your FastAPI application, the file-based router will automatically discover and register the routes from the `routes` directory. You can access your new endpoint at `http://127.0.0.1:8000/`.
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+```
+
+## Running the Server
+
+Run your application using `uv`:
+
+```bash
+PYTHONPATH=src uv run main.py
+```
+
+Now visit `http://127.0.0.1:8000/` to see your API in action, or `http://127.0.0.1:8000/docs` for the interactive documentation.
