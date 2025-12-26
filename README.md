@@ -1,7 +1,6 @@
 # FastRouter
 
-A powerful, high-performance file-based routing system for FastAPI. It automatically maps your directory structure to API routes using **Static Analysis** and **Lazy Loading**.
-
+A simple and intuitive file-based router for FastAPI. This package allows you to define your API routes by structuring your files and directories, making your project more organized and easier to navigate.
 > [!NOTE]
 > You can use this to fuck with your personal or a friends repo but do not push to production :)  
 
