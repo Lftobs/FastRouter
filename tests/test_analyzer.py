@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from file_router.analyzer import StaticAnalyzer
+from fast_router.analyzer import StaticAnalyzer
 
 
 @pytest.fixture

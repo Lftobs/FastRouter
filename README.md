@@ -73,9 +73,9 @@ def get(id: int, q: str = Query(None)):
 You can customize the documentation for each directory (tag) in your router:
 
 ```python
-from file_router import file_router
+from fast_router import fast_router
 
-router = file_router("routes")
+router = fast_router("routes")
 router.set_tag_metadata(
     "users", 
     description="Operations with users and their profiles.",

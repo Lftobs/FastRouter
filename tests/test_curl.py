@@ -1,11 +1,11 @@
 import pytest
-from file_router import file_router
+from fast_router import fast_router
 from fastapi.testclient import TestClient
 
 
 @pytest.fixture(scope="module")
 def client():
-    router = file_router("example/routes")
+    router = fast_router("example/routes")
     return TestClient(router.get_app())
 
 

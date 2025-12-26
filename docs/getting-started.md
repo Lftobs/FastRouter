@@ -42,10 +42,10 @@ In your `main.py`, use the `file_router` helper:
 ```python
 import uvicorn
 from fastapi import FastAPI
-from file_router import file_router
+from fast_router import fast_router
 
 # Initialize the router
-router = file_router("routes")
+router = fast_router("routes")
 app = router.get_app()
 
 if __name__ == "__main__":

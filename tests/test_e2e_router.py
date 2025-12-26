@@ -3,7 +3,7 @@ import shutil
 import tempfile
 from pathlib import Path
 from fastapi.testclient import TestClient
-from file_router import FileBasedRouter
+from fast_router import FastRouter
 
 
 class TestRouterE2E:
@@ -29,7 +29,7 @@ class TestRouterE2E:
             "blog/[...path].py", "def get(path: str): return {'path': path}"
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
         app = router.get_app()
         client = TestClient(app)
@@ -57,7 +57,7 @@ print("SIDE_EFFECT_EXECUTED")
 def get(): return {"ok": True}
 """,
         )
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
 
         captured = capsys.readouterr()
@@ -80,7 +80,7 @@ async def get():
     return {"async": True}
 """,
         )
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
         client = TestClient(router.get_app())
 

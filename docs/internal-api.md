@@ -2,7 +2,7 @@
 
 This page documents the internal classes and methods used by FastRouter. This is useful if you want to extend the router or understand its inner workings.
 
-## `FileBasedRouter`
+## `FastRouter`
 
 The main class responsible for scanning the directory and registering routes with FastAPI.
 

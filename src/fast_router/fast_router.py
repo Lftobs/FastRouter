@@ -16,7 +16,7 @@ from fastapi import FastAPI
 from .analyzer import StaticAnalyzer
 
 
-class FileBasedRouter:
+class FastRouter:
     """
     Main class for the file-based router.
     This class handles:
@@ -436,8 +436,8 @@ class FileBasedRouter:
         return self.app
 
 
-def FastRouter(routes_dir: str = "routes") -> FileBasedRouter:
-    """Create and configure a file-based router."""
-    router = FileBasedRouter(routes_dir)
+def fast_router(routes_dir: str = "routes") -> FastRouter:
+    """Create and configure a fast file-based router."""
+    router = FastRouter(routes_dir)
     router.scan_routes()
     return router

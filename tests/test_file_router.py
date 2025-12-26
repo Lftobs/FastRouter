@@ -3,7 +3,7 @@ import tempfile
 import shutil
 from pathlib import Path
 from fastapi.testclient import TestClient
-from file_router import FileBasedRouter, file_router
+from fast_router import FastRouter, fast_router
 
 
 class TestFileBasedRouter:
@@ -26,7 +26,7 @@ class TestFileBasedRouter:
 
     def test_parse_dynamic_segment(self):
         """Test parsing of dynamic route segments."""
-        router = FileBasedRouter()
+        router = FastRouter()
 
         name, type_, is_catch_all = router._parse_dynamic_segment("[id]")
         assert name == "id"
@@ -55,7 +55,7 @@ class TestFileBasedRouter:
 
     def test_convert_file_path_to_route(self):
         """Test conversion of file paths to route patterns."""
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
 
         file_path = self.routes_dir / "index.py"
         patterns, params = router._convert_file_path_to_route(file_path)
@@ -100,7 +100,7 @@ def post():
 """,
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
 
         client = TestClient(router.get_app())
@@ -131,7 +131,7 @@ def get():
 """,
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
 
         client = TestClient(router.get_app())
@@ -157,7 +157,7 @@ def put(id):
 """,
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
 
         client = TestClient(router.get_app())
@@ -180,7 +180,7 @@ def get(id):
 """,
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
 
         client = TestClient(router.get_app())
@@ -201,7 +201,7 @@ def get(slug):
 """,
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
 
         client = TestClient(router.get_app())
@@ -223,7 +223,7 @@ def get(path):
 """,
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
 
         client = TestClient(router.get_app())
@@ -251,7 +251,7 @@ async def get():
 """,
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
 
         client = TestClient(router.get_app())
@@ -274,7 +274,7 @@ def get(user_id, post_id):
 """,
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
 
         client = TestClient(router.get_app())
@@ -307,7 +307,7 @@ def post(id):
 """,
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
 
         routes = router.get_routes()
@@ -336,7 +336,7 @@ some_variable = "test"
 """,
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.scan_routes()
 
         routes = router.get_routes()
@@ -355,7 +355,7 @@ def get():
 """,
         )
 
-        router = file_router(str(self.routes_dir))
+        router = fast_router(str(self.routes_dir))
         client = TestClient(router.get_app())
 
         response = client.get("/test")
@@ -373,7 +373,7 @@ def get():
 """,
         )
 
-        router = FileBasedRouter(str(self.routes_dir))
+        router = FastRouter(str(self.routes_dir))
         router.set_tag_metadata("meta", description="Tag description")
         router.scan_routes()
 
