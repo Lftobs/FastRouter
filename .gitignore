@@ -11,6 +11,6 @@ __pycache__/
 .ruff*
 .pytest*
 *.lock
-
+*.egg-info/
 
 quick*

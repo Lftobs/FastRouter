@@ -1,4 +1,4 @@
-# FileRouter
+# FastRouter
 
 A powerful, high-performance file-based routing system for FastAPI. It automatically maps your directory structure to API routes using **Static Analysis** and **Lazy Loading**.
 
