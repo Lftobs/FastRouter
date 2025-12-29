@@ -43,6 +43,9 @@ testpaths = [
     "tests",
 ]
 
+[tool.ruff]
+exclude = ["tests"]
+
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
