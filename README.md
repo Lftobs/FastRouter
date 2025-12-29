@@ -23,19 +23,64 @@ A simple and intuitive file-based router for FastAPI. This package allows you to
 
 ## 🛠️ Quick Start
 
-1. **Install dependencies:**
-   ```bash
-   uv sync
-   ```
+### Installation
 
-2. **Run the demo server:**
-   ```bash
-   PYTHONPATH=src uv run example/main.py
-   ```
+We recommend using [uv](https://github.com/astral-sh/uv) for dependency management.
 
-3. **Explore the API:**
-   - Interactive Docs: http://localhost:8000/docs
-   - Home: http://localhost:8000/
+```bash
+uv add fast-router
+```
+
+Or using pip:
+
+```bash
+pip install fast-router
+```
+
+### Basic Usage
+
+#### 1. Create a `routes` directory
+In your project's root directory, create a folder named `routes`.
+
+```text
+.
+├── main.py
+└── routes/
+```
+
+#### 2. Define your routes
+Create Python files inside the `routes` directory. For example, to create a "Hello World" endpoint at the root (`/`), create `routes/index.py`:
+
+```python
+def get():
+    """Welcome to FastRouter!"""
+    return {"message": "Hello World"}
+```
+
+#### 3. Integrate with FastAPI
+In your `main.py`, use the `create_router` helper:
+
+```python
+import uvicorn
+from fast_router import create_router
+
+# Initialize the router
+router = create_router("routes")
+app = router.get_app()
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+```
+
+### Running the Server
+
+Run your application using `uv`:
+
+```bash
+PYTHONPATH=src uv run main.py
+```
+
+Now visit `http://127.0.0.1:8000/` to see your API in action, or `http://127.0.0.1:8000/docs` for the interactive documentation.
 
 ## 📂 Directory Structure
 
@@ -72,9 +117,9 @@ def get(id: int, q: str = Query(None)):
 You can customize the documentation for each directory (tag) in your router:
 
 ```python
-from fast_router import fast_router
+from fast_router import create_router
 
-router = fast_router("routes")
+router = create_router("routes")
 router.set_tag_metadata(
     "users", 
     description="Operations with users and their profiles.",
@@ -96,4 +141,4 @@ make test
 
 ## 📜 License
 
-MIT License
+[MIT License](LICENSE)

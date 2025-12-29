@@ -1,25 +1,26 @@
 site_name: FastRouter Documentation
 site_url: https://mydomain.org/mysite
 theme:
-  name: material
-  palette:
-    scheme: slate
-    primary: indigo
+    name: material
+    palette:
+        scheme: slate
+        primary: indigo
 markdown_extensions:
-  - pymdownx.snippets:
-      check_paths: true
-      base_path: [routes, "."]
-  - pymdownx.highlight:
+    - pymdownx.snippets:
+          check_paths: true
+          base_path: "."
+    - pymdownx.highlight:
           anchor_linenums: true
           line_spans: __span
           pygments_lang_class: true
-  - pymdownx.superfences
+    - pymdownx.superfences
 
 nav:
-  - Home: index.md
-  - Getting Started: getting-started.md
-  - Advanced Features: advanced-features.md
-  - Internal API: internal-api.md
-  - Changelog: changelog.md
-  - Examples:
-    - Request Bodies: examples/REQUEST_BODIES.md
+    - Home: index.md
+    - Getting Started: getting-started.md
+    - Migration Guide: MIGRATION_GUIDE.md
+    - Advanced Features: advanced-features.md
+    - Internal API: internal-api.md
+    - Changelog: changelog.md
+    - Examples:
+          - Request Bodies: examples/REQUEST_BODIES.md

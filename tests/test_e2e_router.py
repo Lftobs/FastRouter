@@ -87,3 +87,31 @@ async def get():
         resp = client.get("/async_route")
         assert resp.status_code == 200
         assert resp.json() == {"async": True}
+
+    def test_variable_default_values(self):
+        """Test that default values referencing module variables work correctly."""
+        self.create_route(
+            "items.py",
+            """
+DEFAULT_PAGE_SIZE = 20
+DEFAULT_SORT = "asc"
+
+def get(page_size: int = DEFAULT_PAGE_SIZE, sort: str = DEFAULT_SORT):
+    return {"page_size": page_size, "sort": sort}
+""",
+        )
+        router = FastRouter(str(self.routes_dir))
+        router.scan_routes()
+        client = TestClient(router.get_app())
+
+        resp = client.get("/items")
+        assert resp.status_code == 200
+        assert resp.json() == {"page_size": 20, "sort": "asc"}
+
+        resp = client.get("/items?page_size=50")
+        assert resp.status_code == 200
+        assert resp.json() == {"page_size": 50, "sort": "asc"}
+
+        resp = client.get("/items?page_size=10&sort=desc")
+        assert resp.status_code == 200
+        assert resp.json() == {"page_size": 10, "sort": "desc"}

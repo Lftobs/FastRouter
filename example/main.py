@@ -14,12 +14,12 @@ Then visit http://localhost:8000 to see the demo in action.
 
 import uvicorn
 from pathlib import Path
-from fast_router import fast_router
+from fast_router import create_router
 
 BASE_DIR = Path(__file__).resolve().parent
 ROUTES_DIR = BASE_DIR / "routes"
 
-router = fast_router(str(ROUTES_DIR))
+router = create_router(str(ROUTES_DIR))
 router.set_tag_metadata(
     "users", description="Operations with users and their profiles."
 )

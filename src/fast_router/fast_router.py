@@ -294,9 +294,18 @@ class FastRouter:
             default = inspect.Parameter.empty
             if "default" in p:
                 try:
+                    # First try to evaluate as a literal (strings, numbers, etc.)
                     default = ast.literal_eval(p["default"])
                 except Exception:
-                    pass
+                    # If that fails, it might be a variable reference
+                    # Load the module to resolve the variable
+                    try:
+                        module = self._get_or_load_module(file_path)
+                        # Try to get the value from the module's namespace
+                        default = eval(p["default"], module.__dict__)
+                    except Exception:
+                        # If we still can't resolve it, leave it as empty
+                        pass
 
             new_params.append(
                 inspect.Parameter(
@@ -367,6 +376,12 @@ class FastRouter:
                         ):
                             needs_immediate_load = True
                             break
+                        if "default" in p:
+                            try:
+                                ast.literal_eval(p["default"])  # ok if literal
+                            except (ValueError, SyntaxError):
+                                needs_immediate_load = True
+                                break
                         # for complex type hint (e.g. pydantic model, list[int])
                         if p.get("type") and p["type"] not in [
                             "int",
@@ -424,7 +439,9 @@ class FastRouter:
                 )
 
             except Exception as e:
-                print(f"Error loading route {file_path}: {e}")
+                logger = logging.getLogger("uvicorn.error")
+                if logger.hasHandlers():
+                    logger.error(f"Error loading route {file_path}: {e}")
                 continue
 
     def get_routes(self) -> List[Dict[str, Any]]:

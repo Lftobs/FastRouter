@@ -1,11 +1,12 @@
 [project]
 name = "fast-router"
-version = "0.2.0"
+version = "0.3.0"
 description = "A simple and intuitive file-based router for FastAPI applications."
 authors = [
   { name = "Lftobs", email = "noreply@github.com" }
 ]
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.13"
 classifiers = [
     "Development Status :: 4 - Beta",

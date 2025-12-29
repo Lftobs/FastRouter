@@ -42,7 +42,7 @@ In your `main.py`, use the `fast_router` helper:
 ```python
 import uvicorn
 from fastapi import FastAPI
-from fast_router import fast_router
+from fast_router import create_router
 
 # Initialize the router
 router = fast_router("routes")

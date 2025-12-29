@@ -5,7 +5,7 @@ This script demonstrates all the features of the file-based router without
 needing to start a server. It shows how different route patterns work.
 """
 
-from fast_router import fast_router
+from fast_router import create_router
 from fastapi.testclient import TestClient
 
 
@@ -14,7 +14,7 @@ def main():
     print("=" * 50)
 
     # Create the router
-    router = fast_router("routes")
+    router = create_router("routes")
     client = TestClient(router.get_app())
 
     # Show registered routes

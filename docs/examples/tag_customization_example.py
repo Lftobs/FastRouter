@@ -8,12 +8,12 @@ This shows how to:
 3. View the resulting tag assignments
 """
 
-from fast_router import fast_router
+from fast_router import create_router
 
 
 def main():
     # Create router with automatic tag assignment
-    router = fast_router("routes")
+    router = create_router("routes")
 
     print("=== Default Tag Assignment ===")
     routes = router.get_routes()
